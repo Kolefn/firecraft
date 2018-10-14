@@ -31,8 +31,8 @@ functions.firestore.document.node('dependent', (doc, dependentDoc, mapping)=> {
 functions.firestore.document.node('count', (root, documentsToCount, mapping)=> {
   for(let i in documentsToCount){
     let doc = documentsToCount[i];
-    functions.firestore.document(doc).onCreate([(snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, 1)]);
-    functions.firestore.document(doc).onDelete([(snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, -1)]);
+    doc.onCreate([(snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, 1)]);
+    doc.onDelete([(snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, -1)]);
   }
 })
 
@@ -118,6 +118,15 @@ functions.firestore.reference.node('increment', (root, incrementation)=> {
   });
 });
 
+
+/* UPDATE DISTRIBUTION node */
+
+functions.firestore.reference.node('updateDistribution', (root, update)=> {
+  let doc = root.child('shards/{shardId}');
+  for(let i = 0; i < 3; i++){
+    doc.instance({shardId: i}).set(update, {merge: true});
+  }
+})
 
 /* UTILITIES */
 

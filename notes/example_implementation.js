@@ -92,19 +92,49 @@ documents.userPack.reputation(functions.analytics.event('session_start').onLog,(
 
 
 
-/* ADMIN HTTPS */
-functions.https.onAdminCall('banUser').delete('userPackContent', {packId: '*'}).update('user', {writeAccessRevoked: true})
-                                      .setCustomUserClaims({writeAccessRevoked: true});
 
-functions.https.onAdminCall('removeContentFromModeration').delete('moderationContent');
-functions.https.onAdminCall('deleteContent').archive('{path}', 'archive', {archiveId: 'infringement'});
-functions.https.onAdminCall('activateContent').update('{path}');
-functions.https.onAdminCall('flagContent').create('moderationContent');
-functions.https.onAdminCall('getModerationContent').get('moderationContent', {contentId: '*'});
-functions.https.onAdminCall('notifyPackOfAdminPost').create('packNotification');
+/* ADMIN HTTPS */
+functions.https.onCall('banUser', (data, context)=> {
+  return Promise.all([
+    //explicit map of '{userId}' is not needed her but leaving for clarity
+    docs.userPackContent.instance(data, {userId: '{userId}', packId: '*'}).delete(),
+    docs.user.instance(data).update({writeAccessRevoked: true}),
+    admin.user(data.uid).setCustomUserClaims({writeAccessRevoked: true}),   //@TODO check this
+  ]);
+}, {admin: true});
+
+functions.https.onCall('removeContentFromModeration', (data)=> {
+  return docs.moderationContent.instance(data).delete();
+},{admin: true});
+functions.https.onCall('deleteContent', (data)=> {
+  return functions.firestore.reference.parse(data.path).archive('infringement');
+}, {admin: true});
+
+functions.https.onCall('activateContent', (data)=> {
+  return functions.firestore.reference.parse(data.path).update({active: true});
+}, {admin: true});
+
+functions.https.onCall('flagContent', (data)=> {
+  return docs.moderationContent.instance(data).set(data);
+}, {admin: true});
+
+functions.https.onCall('getModerationContent', (data)=> {
+  //assumes data contacts query parameters taken by get
+  return docs.moderationContent.collection.get(data); //@TODO decide on get/query design
+}, {admin: true});
+
+functions.https.onCall('notifyPackOfAdminPost', (data)=> {
+  return docs.packNotification.instance(data).set(data);
+}, {admin: true});
 
 /* USER HTTPS */
-functions.https.onCall('createPack').create('pack');
+functions.https.onCall('createPack', (data)=> {
+  /*
+    may be a good idea to explicitly state somewhere what these
+    instance/set function require.
+  */
+  return docs.pack.instance(data).set(data);
+}, {admin: true});
 
 const THREE_DAYS = 1000*60*60*24*3;
 const DIST_SIZE = 3;
@@ -134,7 +164,30 @@ let processInviteReceipt = functions.function()
   .set('userInviteRecipient');
 
 
-functions.https.onCall('processInviteReceipt').run(processInviteReceipt);
+functions.https.onCall('processInviteReceipt', (data, context)=> {
+  let { invitedBy } = data;
+  docs.user.instance(data).transaction((doc, t)=> {
+    let userData = doc.data();
+    if(doc.exists && userData.invitedBy){
+      return Promise.reject("User already invited.");
+    }else if(doc.exists){
+      t.update({invitedBy})
+    }else{
+      t.set({invitedBy});
+    }
+    return userData.defaultPackId;
+  }).then((defaultPackId)=> {
+    docs.userBadge.instance(data, {badgeId: 'invited_by'}).set(); //default set activated
+    let multiplier = docs.userBonusItem.instance(data, {itemId: 'shiny_stone'});
+    multiplier.set({value: 2, endTime: new Date().setTime(new Date().getTime() + THREE_DAYS)});
+    docs.userPack.instance(data, {packId: defaultPackId}).updateDistribution({multiplier});
+    if(data.groupCode){
+      docs.inviteGroupRecipient.instance(data).set({invitedBy});
+      docs.inviteGroupMember.instance(data, {userId: invitedBy}).increment({recipientCount: 1});
+      docs.userInviteRecipient.instance(data, {userId: invitedBy}).set();
+    }
+  });
+});
 
 
 exports = functions.export();

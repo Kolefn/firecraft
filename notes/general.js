@@ -15,7 +15,11 @@ methods:
 */
 
 
-/* VISIONS */
+/* THE BASICS
+    This framework doesn't seek to change the base firebase api.
+    The base api is good! This framework builds ontop of it, to
+    alleviate the complications of larger projects.
+ */
 
 
 let users = firestore.collection('users');
