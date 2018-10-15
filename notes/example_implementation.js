@@ -90,9 +90,6 @@ documents.userPack.reputation(documents.postVote.onCreate, ()=> 0.1);
 documents.userPack.reputation(documents.commentVote.onCreate, ()=> 0.1);
 documents.userPack.reputation(functions.analytics.event('session_start').onLog,()=> 0.1, {userId: '{user.userId}'});
 
-
-
-
 /* ADMIN HTTPS */
 functions.https.onCall('banUser', (data, context)=> {
   return Promise.all([
@@ -139,31 +136,8 @@ functions.https.onCall('createPack', (data)=> {
 const THREE_DAYS = 1000*60*60*24*3;
 const DIST_SIZE = 3;
 
-functions.function.node('multiplierFlag')
-  .input(['document','params'])
-  .child('{document}', 'shard', 'shards/{shardId}')
-  .for(DIST_SIZE, (chain, i)=> {
-    chain.document('shard', {shardId: i}).set('shard', '{param}');
-  });
-
-let processInviteReceipt = functions.function()
-  .validate({invitedBy: 'string', recipientId: '{context.auth.uid}'})
-  .variables({userId: '{recipientId}'})
-  .set('user', {invitedBy: '{invitedBy}'}, {overrideFields: false})
-  .variables({packId: '{defaultPackId}'})
-  .document('userBadge', {badgeId: 'invited_by'})
-  .set('userBadge')
-  .document('userBonusItem', {itemId: 'shiny_stone'})
-  .set('userBonusItem', {value: 2, endTime: new Date().setTime(new Date().getTime() + THREE_DAYS)})
-  .multiplierFlag('userPack', {multiplier: '{bonusItem}'})
-  .document('inviteGroupRecipient',{groupId: '{groupCode}'})
-  .set('inviteGroupRecipient', {invitedBy: '{invitedBy}'})
-  .document('inviteGroupMember', {userId: '{invitedBy}'})
-  .count('inviteGroupMember', {recipientCount: 1});
-  .document('userInviteRecipient', {userId: '{invited_by}'})
-  .set('userInviteRecipient');
-
-
+//@TODO is this code simplfied enough? is it self-documenting?
+//@TODO deal with loose promises
 functions.https.onCall('processInviteReceipt', (data, context)=> {
   let { invitedBy } = data;
   docs.user.instance(data).transaction((doc, t)=> {
@@ -180,9 +154,9 @@ functions.https.onCall('processInviteReceipt', (data, context)=> {
     docs.userBadge.instance(data, {badgeId: 'invited_by'}).set(); //default set activated
     let multiplier = docs.userBonusItem.instance(data, {itemId: 'shiny_stone'});
     multiplier.set({value: 2, endTime: new Date().setTime(new Date().getTime() + THREE_DAYS)});
-    docs.userPack.instance(data, {packId: defaultPackId}).updateDistribution({multiplier});
+    docs.userPack.instance(data, {packId: defaultPackId}).updateDistribution({multiplier: multiplier.ref});
     if(data.groupCode){
-      docs.inviteGroupRecipient.instance(data).set({invitedBy});
+      docs.inviteGroupRecipient.instance(data).set({invitedBy}); //@TODO implement defaults
       docs.inviteGroupMember.instance(data, {userId: invitedBy}).increment({recipientCount: 1});
       docs.userInviteRecipient.instance(data, {userId: invitedBy}).set();
     }
