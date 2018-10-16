@@ -4,6 +4,7 @@ performance optimized
 structured, easier for teams, maintainable/extendable.
 easier and simpler integration with other firebase services.
 
+self-tested, automatic unit test with each node definition, improved unit tests
 
 methods:
   "sugarization"

@@ -137,7 +137,6 @@ const THREE_DAYS = 1000*60*60*24*3;
 const DIST_SIZE = 3;
 
 //@TODO is this code simplfied enough? is it self-documenting?
-//@TODO deal with loose promises
 functions.https.onCall('processInviteReceipt', (data, context)=> {
   let { invitedBy } = data;
   docs.user.instance(data).transaction((doc, t)=> {
@@ -151,16 +150,42 @@ functions.https.onCall('processInviteReceipt', (data, context)=> {
     }
     return userData.defaultPackId;
   }).then((defaultPackId)=> {
-    docs.userBadge.instance(data, {badgeId: 'invited_by'}).set(); //default set activated
     let multiplier = docs.userBonusItem.instance(data, {itemId: 'shiny_stone'});
-    multiplier.set({value: 2, endTime: new Date().setTime(new Date().getTime() + THREE_DAYS)});
-    docs.userPack.instance(data, {packId: defaultPackId}).updateDistribution({multiplier: multiplier.ref});
+    let batch = [
+      docs.userBadge.instance(data, {badgeId: 'invited_by'}).set(), //default set activated
+      multiplier.set({value: 2, endTime: new Date().setTime(new Date().getTime() + THREE_DAYS)}),
+      docs.userPack.instance(data, {packId: defaultPackId}).updateDistribution({multiplier: multiplier.ref}),
+    ];
+
     if(data.groupCode){
-      docs.inviteGroupRecipient.instance(data).set({invitedBy}); //@TODO implement defaults
-      docs.inviteGroupMember.instance(data, {userId: invitedBy}).increment({recipientCount: 1});
-      docs.userInviteRecipient.instance(data, {userId: invitedBy}).set();
+      batch = batch.concat([
+        docs.inviteGroupRecipient.instance(data).set({invitedBy}), //@TODO implement defaults
+        docs.inviteGroupMember.instance(data, {userId: invitedBy}).increment({recipientCount: 1}),
+        docs.userInviteRecipient.instance(data, {userId: invitedBy}).set(),
+      ]);
     }
+
+    return Promise.all(batch);
   });
+});
+
+functions.pubsub.topic('daily-tick').onPublish('calculateRankings', (message)=> {
+  let batchSize = 10;
+  docs.pack.collection.instance().onBatch({size: batchSize}, (packDoc)=> {
+    return docs.packUser.collection.instance({packId: packDoc.id}).onBatch({size: batchSize}, (userDoc)=> {
+      let instanceData = {userId: userDoc.id, packId: packDoc.id};
+      return docs.userPack.instance(instanceData).get().then((userPackDoc)=> {
+        let reputation = userPackDoc.exists ? userPackDoc.data().reputation : 0;
+        return docs.packRanking.instance(instanceData).set({reputation}, {merge: true});
+      });
+    }).then(()=> {
+      let batchOptions = {size: batchSize, orderBy: 'reputation', direction: 'asc'}
+      return docs.packRanking.collection.instance({packId: packDoc.id}).onBatch(batchOptions, (rankDoc, i)=> {
+        //convert to framework reference to exploit underlying optimizations such as auto batch writes
+        functions.firestore.reference(rankDoc.ref).update({rank: i});
+      });
+    });
+  })
 });
 
 
