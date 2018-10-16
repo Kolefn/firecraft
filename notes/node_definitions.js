@@ -128,6 +128,37 @@ functions.firestore.reference.node('updateDistribution', (root, update)=> {
   }
 })
 
+
+/* onBatch node */
+
+
+functions.firestore.collection.instance.node('onBatch', (instance, options, func)=> {
+  let cursor = options.startAfter;
+  let index = 0;
+  let batch = ()=> {
+      let getOptions = {...options, startAfter: cursor, limit: options.size || 20, orderBy: options.orderBy || '__name__'};
+      return instance.get(getOptions).then((snapshot)=> {
+        if(snapshot.size == 0){ return Promise.resolve(); }
+        let last;
+        snapshot.forEach((doc)=> {
+          func(doc, index);
+          index++;
+          doc.exists && last = doc;
+        });
+        cursor = options.orderBy ? doc.data()[options.orderBy] : doc.id;
+        return process.tick(()=> batch());
+    });
+  };
+
+  return batch();
+});
+
+
+
+
+
+
+
 /* UTILITIES */
 
 functions.function('addArrays', (arrays=[]) => {
