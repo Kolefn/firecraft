@@ -30,7 +30,7 @@ const PATHS = {
   archive: 'archives/{archiveId}'
 };
 
-let documents = functions.firestore.createDocuments(PATHS);
+let docs = functions.firestore.createDocuments(PATHS);
 
 /*  COUPLE LINKS */
 functions.auth.user().couple(docs.user);
@@ -169,7 +169,8 @@ functions.https.onCall('processInviteReceipt', (data, context)=> {
   });
 });
 
-functions.pubsub.topic('daily-tick').onPublish('calculateRankings', (message)=> {
+functions.runWith({ timeoutSeconds: 540,memory: '2GB',})
+.pubsub.topic('daily-tick').onPublish('calculateRankings', (message)=> {
   let batchSize = 10;
   docs.pack.collection.instance().onBatch({size: batchSize}, (packDoc)=> {
     return docs.packUser.collection.instance({packId: packDoc.id}).onBatch({size: batchSize}, (userDoc)=> {

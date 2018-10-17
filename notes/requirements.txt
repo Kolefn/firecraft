@@ -1,0 +1,30 @@
+
+
+
+how do we perform TDD on this??
+
+DOCUMENTS
+
+node definitions
+
+auto build unit test for each node ??
+
+parent
+
+child
+
+collection
+
+triggers accept array of functions
+
+
+
+DOCUMENT INSTANCE OPERATIONS (e.g. set, get, transaction)
+
+
+auto stubbing in offline test mode / optional "test" root collection for online mode
+
+auto convert writes to batch
+
+
+get takes query options (e.g. .get({limit: 10, where: [field, '==', true]}))
