@@ -47,4 +47,14 @@ describe('firestore.document', function(){
       temp.instance({userId: 'kole', characterId: 'zabeebo'}).should.be.an.instanceOf(document).with.property("path", "users/kole/characters/zabeebo");
     });
   });
+
+  describe('#onCreate', function(){
+    it('should throw if handler is nil or not a function', function(){
+      chai.expect(temp.onCreate.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
+      chai.expect(temp.onCreate.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
+    });
+    it("should return the same document instance", function(){
+      temp.onCreate(()=> 1).should.equal(temp);
+    });
+  });
 })

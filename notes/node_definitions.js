@@ -10,11 +10,11 @@ functions.firestore.document.node('couple', (doc, docToCouple, mapping)=> {
 
 
 functions.firestore.document.node('create', (doc, docToCreate, mapping)=> {
-  doc.onCreate([(snapshot)=> dependentDoc.instance(snapshot, mapping).set(snapshot.data())]);
+  doc.onCreate((snapshot)=> docToCreate.instance(snapshot, mapping).set(snapshot.data()));
 });
 
 functions.firestore.document.node('dependent', (doc, dependentDoc, mapping)=> {
-  doc.onDelete([(snapshot)=> dependentDoc.instance(snapshot, mapping).delete()]);
+  doc.onDelete((snapshot)=> dependentDoc.instance(snapshot, mapping).delete());
 });
 
 
@@ -31,8 +31,8 @@ functions.firestore.document.node('dependent', (doc, dependentDoc, mapping)=> {
 functions.firestore.document.node('count', (root, documentsToCount, mapping)=> {
   for(let i in documentsToCount){
     let doc = documentsToCount[i];
-    doc.onCreate([(snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, 1)]);
-    doc.onDelete([(snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, -1)]);
+    doc.onCreate((snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, 1));
+    doc.onDelete((snapshot)=> root.instance(snapshot, mapping).incrementField(snapshot.ref.parent.id, -1));
   }
 })
 
@@ -56,9 +56,9 @@ functions.firestore.document.node('distributedStatistic', (root, event, calculat
   let child = root.child('shards/{shardId}');
   let shardId = '!' + shards; // ! indicates random to the instance function
   child.statistic({source, calculation, mapping: functions.cloneMap(mapping, {shardId}), triggers});
-  child.onCreate([(snapshot)=>  root.instance(snapshot, mapping).increment(functions.getDelta({}, snapshot.data())]);
+  child.onCreate((snapshot)=>  root.instance(snapshot, mapping).increment(functions.getDelta({}, snapshot.data()));
   //no delete because shards are dependent on their parent - thus no need to update the parent
-  child.onUpdate([(change)=>  root.instance(change, mapping).increment(functions.getDelta(change.before.data(), change.after.data())]);
+  child.onUpdate((change)=>  root.instance(change, mapping).increment(functions.getDelta(change.before.data(), change.after.data()));
 });
 
 
@@ -97,9 +97,9 @@ functions.firestore.document.node('reputation', (root, event, calculation, mappi
   let child = root.child('shards/{shardId}');
   let shardId = '!3'; // ! indicates random to the instance function
   event([(data)=> child.instance(data, functions.cloneMap(mapping, {shardId})).multIncrement(calculation(data)))]));
-  child.onCreate([(snapshot)=>  root.instance(snapshot, mapping).increment(functions.getDelta({}, snapshot.data())]);
+  child.onCreate((snapshot)=>  root.instance(snapshot, mapping).increment(functions.getDelta({}, snapshot.data()));
   //no delete because shards are dependent on their parent - thus no need to update the parent
-  child.onUpdate([(change)=>  root.instance(change, mapping).increment(functions.getDelta(change.before.data(), change.after.data())]);
+  child.onUpdate((change)=>  root.instance(change, mapping).increment(functions.getDelta(change.before.data(), change.after.data()));
 });
 
 
