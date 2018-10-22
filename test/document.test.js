@@ -64,4 +64,55 @@ describe('firestore.document', function(){
       temp._onCreateHandlers.pop().should.equal(sayHello);
     });
   });
+
+  describe('#onDelete', function(){
+    it('should throw if handler is nil or not a function', function(){
+      chai.expect(temp.onDelete.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
+      chai.expect(temp.onDelete.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
+    });
+
+    it("should return the same document instance", function(){
+      temp.onDelete(()=> 1).should.equal(temp);
+    });
+
+    it("should append handler to ongoing onDelete handlers", function(){
+      let sayHello = ()=> "hello world";
+      temp.onDelete(sayHello);
+      temp._onDeleteHandlers.pop().should.equal(sayHello);
+    });
+  });
+
+  describe('#onUpdate', function(){
+    it('should throw if handler is nil or not a function', function(){
+      chai.expect(temp.onUpdate.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
+      chai.expect(temp.onUpdate.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
+    });
+
+    it("should return the same document instance", function(){
+      temp.onUpdate(()=> 1).should.equal(temp);
+    });
+
+    it("should append handler to ongoing onUpdate handlers", function(){
+      let sayHello = ()=> "hello world";
+      temp.onUpdate(sayHello);
+      temp._onUpdateHandlers.pop().should.equal(sayHello);
+    });
+  });
+
+  describe('#onWrite', function(){
+    it('should throw if handler is nil or not a function', function(){
+      chai.expect(temp.onWrite.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
+      chai.expect(temp.onWrite.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
+    });
+
+    it("should return the same document instance", function(){
+      temp.onWrite(()=> 1).should.equal(temp);
+    });
+
+    it("should append handler to ongoing onWrite handlers", function(){
+      let sayHello = ()=> "hello world";
+      temp.onWrite(sayHello);
+      temp._onWriteHandlers.pop().should.equal(sayHello);
+    });
+  });
 })

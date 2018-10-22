@@ -176,21 +176,22 @@ functions.https.onCall('processInviteReceipt', (data, context)=> {
 functions.runWith({ timeoutSeconds: 540,memory: '2GB',})
 .pubsub.topic('daily-tick').onPublish('calculateRankings', (message)=> {
   let batchSize = 10;
-  docs.pack.collection.instance().onBatch({size: batchSize}, (packDoc)=> {
-    return docs.packUser.collection.instance({packId: packDoc.id}).onBatch({size: batchSize}, (userDoc)=> {
+  let batch = functions.firestore.document.batch();
+  return docs.pack.collection.forEachDocument((packDoc)=> {
+    return docs.packUser.collection.instance({packId: packDoc.id}).forEachDocument((userDoc)=> {
       let instanceData = {userId: userDoc.id, packId: packDoc.id};
       return docs.userPack.instance(instanceData).get().then((userPackDoc)=> {
         let reputation = userPackDoc.exists ? userPackDoc.data().reputation : 0;
-        return docs.packRanking.instance(instanceData).set({reputation}, {merge: true});
+        return docs.packRanking.instance(instanceData).set({reputation}, {merge: true, batch});
       });
-    }).then(()=> {
-      let batchOptions = {size: batchSize, orderBy: 'reputation', direction: 'asc'}
-      return docs.packRanking.collection.instance({packId: packDoc.id}).onBatch(batchOptions, (rankDoc, i)=> {
+    },{batchSize}).then(batch.commit).then(()=> {
+      let options = {batchSize, orderBy: 'reputation', direction: 'asc'}
+      return docs.packRanking.collection.instance({packId: packDoc.id}).forEachDocument((rankDoc, i)=> {
         //convert to framework reference to exploit underlying optimizations such as auto batch writes
-        functions.firestore.reference(rankDoc.ref).update({rank: i});
-      });
-    });
-  })
+        return functions.firestore.reference(rankDoc.ref).update({rank: i, }, {batch});
+      }, options);
+    }).then(batch.commit);
+  }, {batchSize})
 });
 
 

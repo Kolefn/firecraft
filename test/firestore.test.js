@@ -22,7 +22,7 @@ describe('firestore', function(){
     it('should return a map of firestore cloud functions', function(){
       let sayHello = ()=> 'hello world';
       documents.user.onCreate(sayHello);
-      firestore.export().userOnCreate.should.be.a('function');
+      firestore.export().userOnCreate.should.be.a('function').with.property('name', 'cloudFunction');
     });
   });
 })
