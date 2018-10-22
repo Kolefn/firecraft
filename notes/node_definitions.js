@@ -96,7 +96,7 @@ functions.firestore.document.node('multIncrement', (root, incrementation)=> {
 functions.firestore.document.node('reputation', (root, event, calculation, mapping)=> {
   let child = root.child('shards/{shardId}');
   let shardId = '!3'; // ! indicates random to the instance function
-  event([(data)=> child.instance(data, functions.cloneMap(mapping, {shardId})).multIncrement(calculation(data)))]));
+  event((data)=> child.instance(data, functions.cloneMap(mapping, {shardId})).multIncrement(calculation(data)))));
   child.onCreate((snapshot)=>  root.instance(snapshot, mapping).increment(functions.getDelta({}, snapshot.data()));
   //no delete because shards are dependent on their parent - thus no need to update the parent
   child.onUpdate((change)=>  root.instance(change, mapping).increment(functions.getDelta(change.before.data(), change.after.data()));

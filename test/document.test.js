@@ -53,8 +53,15 @@ describe('firestore.document', function(){
       chai.expect(temp.onCreate.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
       chai.expect(temp.onCreate.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
     });
+
     it("should return the same document instance", function(){
       temp.onCreate(()=> 1).should.equal(temp);
+    });
+
+    it("should append handler to ongoing onCreate handlers", function(){
+      let sayHello = ()=> "hello world";
+      temp.onCreate(sayHello);
+      temp._onCreateHandlers.pop().should.equal(sayHello);
     });
   });
 })

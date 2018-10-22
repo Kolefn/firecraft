@@ -31,6 +31,10 @@ const PATHS = {
 };
 
 let docs = functions.firestore.createDocuments(PATHS);
+/* or alternatively
+    let doc = new function.firestore.collection.document(path);
+    functions.firestore.registerDocument('name', doc);
+*/
 
 /*  COUPLE LINKS */
 functions.auth.user().couple(docs.user);

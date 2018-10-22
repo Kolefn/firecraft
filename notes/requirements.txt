@@ -15,11 +15,7 @@ child
 
 collection
 
-triggers accept array of functions
-
-
-
-DOCUMENT INSTANCE OPERATIONS (e.g. set, get, transaction)
+triggers accept a single handler (but they can be automatically aggregated if set)
 
 
 auto stubbing in offline test mode / optional "test" root collection for online mode
