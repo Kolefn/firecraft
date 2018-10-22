@@ -1,4 +1,4 @@
-var util = require('../lib/functions/util');
+var util = require('../lib/functions/firestore/util');
 var chai = require('chai');
 chai.should();
 
