@@ -1,6 +1,5 @@
 var document = require('../lib/functions/firestore/document');
 var chai = require('chai');
-chai.use(require("chai-as-promised"));
 chai.should();
 
 
@@ -42,26 +41,13 @@ describe('document', function(){
   describe('#instance', function(){
     it('should reference the STATIC intance class', function(){
       document.instance.should.not.be.an.instanceOf(document.instance);
-      document.instance.prototype.constructor.name.should.equal('instance');
+      document.instance.prototype.constructor.name.should.equal('documentInstance');
     });
   });
 
   describe('#instance()', function(){
     it('should return a new documentInstance object', function(){
       temp.instance({userId: 'kole', characterId: 'zabeebo'}).should.be.an.instanceOf(document.instance);
-    });
-  });
-
-  describe('#isValidPath', function(){
-    it('should return true for valid paths', function(){
-      document.isValidPath('collection/{docId}').should.be.ok;
-      document.isValidPath('collection/{docId}/col/{documentId}').should.be.ok;
-    });
-
-    it('should return false for invalid paths', function(){
-      document.isValidPath('collection').should.not.be.ok;
-      document.isValidPath('collection/{docId}/col').should.not.be.ok;
-      document.isValidPath(null).should.not.be.ok;
     });
   });
 })

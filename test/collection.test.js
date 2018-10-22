@@ -1,6 +1,5 @@
 var collection = require('../lib/functions/firestore/collection');
 var chai = require('chai');
-chai.use(require("chai-as-promised"));
 chai.should();
 
 
