@@ -38,16 +38,13 @@ describe('document', function(){
     });
   });
 
-  describe('#instance', function(){
-    it('should reference the STATIC intance class', function(){
-      document.instance.should.not.be.an.instanceOf(document.instance);
-      document.instance.prototype.constructor.name.should.equal('documentInstance');
-    });
-  });
-
   describe('#instance()', function(){
-    it('should return a new documentInstance object', function(){
-      temp.instance({userId: 'kole', characterId: 'zabeebo'}).should.be.an.instanceOf(document.instance);
+    it('should at least return a copy of the document object', function(){
+      temp.instance().should.be.an.instanceOf(document).with.property('path', temp.path);
+    });
+
+    it('should return a new document with provided arguments in place of path parameters', function(){
+      temp.instance({userId: 'kole', characterId: 'zabeebo'}).should.be.an.instanceOf(document).with.property("path", "users/kole/characters/zabeebo");
     });
   });
 })

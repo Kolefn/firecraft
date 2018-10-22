@@ -30,12 +30,6 @@ describe('collection', function(){
     });
   });
 
-  describe('#instance', function(){
-    it('should return the STATIC intance class', function(){
-      collection.instance.should.not.be.an.instanceOf(collection.instance);
-      collection.instance.prototype.constructor.name.should.equal('instance');
-    });
-  });
 
   describe('#document', function(){
     it('should return the STATIC document class', function(){
