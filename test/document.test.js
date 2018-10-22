@@ -3,7 +3,7 @@ var chai = require('chai');
 chai.should();
 
 
-describe('document', function(){
+describe('firestore.document', function(){
 
   var temp;
 

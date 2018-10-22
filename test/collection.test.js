@@ -3,7 +3,7 @@ var chai = require('chai');
 chai.should();
 
 
-describe('collection', function(){
+describe('firestore.collection', function(){
 
   var temp;
 

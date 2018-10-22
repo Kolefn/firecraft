@@ -1,9 +1,9 @@
-var util = require('../lib/functions/firestore/util');
-var chai = require('chai');
+const { util } = require('../lib/functions/firestore');
+const chai = require('chai');
 chai.should();
 
 
-describe('util', function(){
+describe('firestore.util', function(){
   describe('#extractPathParams()', function(){
 
     it('should return a map of params', function(){
@@ -44,7 +44,7 @@ describe('util', function(){
     });
   });
 
-  describe('#isValidPath', function(){
+  describe('#isValidPath()', function(){
     it('should return true for valid document paths', function(){
       util.isValidPath('collection/{docId}').should.be.ok;
       util.isValidPath('collection/{docId}/col/{documentId}').should.be.ok;
@@ -64,6 +64,17 @@ describe('util', function(){
     it('should return true for collection paths when false provided for even param.', function(){
       util.isValidPath('collection', false).should.be.ok;
       util.isValidPath('collection/{docId}/col', false).should.be.ok;
+    });
+  });
+
+  describe("#node()", function(){
+    it('should define a new function', function(){
+      util.node('test', ()=> 1);
+      util.test.should.be.a('function');
+    });
+
+    it('should define a new a function that returns defined value', function(){
+      util.test().should.equal(1);
     });
   });
 });
