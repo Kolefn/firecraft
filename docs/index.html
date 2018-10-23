@@ -43,52 +43,6 @@
                       </a></li>
                     
                       <li><a
-                        href='#collectioninstance'
-                        class='regular pre-open'>
-                        .instance
-                      </a></li>
-                    
-                      <li><a
-                        href='#collectiondocument'
-                        class='regular pre-open'>
-                        .document
-                      </a></li>
-                    
-                    </ul>
-                  
-                  
-                  
-                  
-                </div>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#collection'
-                  class=" toggle-sibling">
-                  collection
-                  <span class='icon'>▸</span>
-                </a>
-                
-                <div class='toggle-target display-none'>
-                  
-                  <ul class='list-reset py1-ul pl1'>
-                    <li class='h5'><span>Static members</span></li>
-                    
-                      <li><a
-                        href='#collectionnode'
-                        class='regular pre-open'>
-                        .node
-                      </a></li>
-                    
-                      <li><a
-                        href='#collectioninstance'
-                        class='regular pre-open'>
-                        .instance
-                      </a></li>
-                    
-                      <li><a
                         href='#collectiondocument'
                         class='regular pre-open'>
                         .document
@@ -123,17 +77,62 @@
                       </a></li>
                     
                       <li><a
-                        href='#documentinstance'
+                        href='#documenterrors'
                         class='regular pre-open'>
-                        .instance
+                        .errors
                       </a></li>
                     
                     </ul>
                   
                   
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#documentinstance'
+                        class='regular pre-open'>
+                        #instance
+                      </a></li>
+                      
+                      <li><a
+                        href='#documentoncreate'
+                        class='regular pre-open'>
+                        #onCreate
+                      </a></li>
+                      
+                      <li><a
+                        href='#documentondelete'
+                        class='regular pre-open'>
+                        #onDelete
+                      </a></li>
+                      
+                      <li><a
+                        href='#documentonupdate'
+                        class='regular pre-open'>
+                        #onUpdate
+                      </a></li>
+                      
+                      <li><a
+                        href='#documentonwrite'
+                        class='regular pre-open'>
+                        #onWrite
+                      </a></li>
+                      
+                    </ul>
+                  
                   
                   
                 </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#documents'
+                  class="">
+                  documents
+                  
+                </a>
                 
                 </li>
               
@@ -151,15 +150,15 @@
                     <li class='h5'><span>Static members</span></li>
                     
                       <li><a
-                        href='#firestorecollection'
-                        class='regular pre-open'>
-                        .collection
-                      </a></li>
-                    
-                      <li><a
                         href='#firestorecreatedocuments'
                         class='regular pre-open'>
                         .createDocuments
+                      </a></li>
+                    
+                      <li><a
+                        href='#firestoreexport'
+                        class='regular pre-open'>
+                        .export
                       </a></li>
                     
                     </ul>
@@ -173,11 +172,79 @@
               
                 
                 <li><a
-                  href='#functions'
+                  href='#extractpathparams'
                   class="">
-                  functions
+                  extractPathParams
                   
                 </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#injectpathargs'
+                  class="">
+                  injectPathArgs
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#isvalidpath'
+                  class="">
+                  isValidPath
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#node'
+                  class="">
+                  node
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#node'
+                  class="">
+                  node
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#functions'
+                  class=" toggle-sibling">
+                  functions
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#functionsexport'
+                        class='regular pre-open'>
+                        .export
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
                 
                 </li>
               
@@ -205,8 +272,7 @@
   
 
   <p>This class is a high level representation of a firestore collection.
-Specifically, it represents a generic reference to a collection before
-arguments are provided for the document ID parameters in the path.</p>
+Path parameters wrapped in curly brackets are supported.</p>
 
  
   
@@ -229,7 +295,7 @@ arguments are provided for the document ID parameters in the path.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    is a generic path wich may include document ID parameters.
+	    is a path wich may include parameters.
 
           </div>
           
@@ -301,7 +367,7 @@ arguments are provided for the document ID parameters in the path.</p>
           <div>
             <span class='code bold'>func</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
 	    what this node will do.
-Note: The collection object will be automatically inserted as the first argument.
+The collection object will be automatically inserted as the first argument.
 
           </div>
           
@@ -322,62 +388,6 @@ Note: The collection object will be automatically inserted as the first argument
       
       <pre class='p1 overflow-auto round fill-light'>node(<span class="hljs-string">'child'</span>, (col, childName) =&gt; col.document(col.path + <span class="hljs-string">'/'</span> + childName));</pre>
     
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='collectioninstance'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>instance</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Getter for the static members of collection instance.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>instance</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
-        collection.instance module
-
-      
-    
-  
-
-  
-
   
 
   
@@ -425,251 +435,7 @@ Note: The collection object will be automatically inserted as the first argument
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
-        collection.document module
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-</div>
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
-    <h3 class='fl m0' id='collection'>
-      collection
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>This index file defines this collection folder as the collection module.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>collection</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Static Members</div>
-    <div class="clearfix">
-  
-    <div class='border-bottom' id='collectionnode'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>node(name, func)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Defines a new function to be called on this class.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>node(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, func: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    what this node shall be called.
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>func</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
-	    what this node will do.
-Note: The collection object will be automatically inserted as the first argument.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>node(<span class="hljs-string">'child'</span>, (col, childName) =&gt; col.document(col.path + <span class="hljs-string">'/'</span> + childName));</pre>
-    
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='collectioninstance'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>instance</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Getter for the static members of collection instance.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>instance</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
-        collection.instance module
-
-      
-    
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
-    <div class='border-bottom' id='collectiondocument'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>document</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Getter for the static members of collection document.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>document</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
+      <code><a href="#document">document</a></code>:
         collection.document module
 
       
@@ -715,8 +481,7 @@ Note: The collection object will be automatically inserted as the first argument
   
 
   <p>This class is a high level representation of a firestore document.
-Specifically, it represents a generic reference to a document before
-arguments are provided for the document ID parameters in the path.</p>
+Path parameters wrapped in curly brackets are supported.</p>
 
  
   
@@ -739,7 +504,7 @@ arguments are provided for the document ID parameters in the path.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    is a generic path wich may include document ID parameters.
+	    is a path wich may include parameters.
 
           </div>
           
@@ -811,7 +576,7 @@ arguments are provided for the document ID parameters in the path.</p>
           <div>
             <span class='code bold'>func</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
 	    what this node will do.
-Note: The document object will be automatically inserted as the first argument.
+The document object will be automatically inserted as the first argument.
 
           </div>
           
@@ -844,11 +609,11 @@ Note: The document object will be automatically inserted as the first argument.
       </div>
     </div>
   
-    <div class='border-bottom' id='documentinstance'>
+    <div class='border-bottom' id='documenterrors'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>instance</span>
+            <span class='code strong strong truncate'>errors</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -856,11 +621,11 @@ Note: The document object will be automatically inserted as the first argument.
 
   
 
-  <p>Getter for the static members of document instance.</p>
+  <p>A map of potential document errors.</p>
 
  
   
-    <div class='pre p1 fill-light mt0'>instance</div>
+    <div class='pre p1 fill-light mt0'>errors</div>
    
   
   
@@ -877,10 +642,394 @@ Note: The document object will be automatically inserted as the first argument.
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='documentinstance'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>instance(data, map)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Creates a copy of this document with the option to
+fullfil path parameters with provided data &#x26; map.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>instance(data: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, map: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="#document">document</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    from which arguments for path parameters will be extracted.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>map</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    path parameter names to relevant data property names.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code>any</code>:
-        document.instance module
+      <code><a href="#document">document</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">new</span> <span class="hljs-built_in">document</span>(<span class="hljs-string">'users/{userId}'</span>).instance({<span class="hljs-attr">uid</span>: <span class="hljs-string">'zach123'</span>}, {<span class="hljs-attr">userId</span>: <span class="hljs-string">'uid'</span>});</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='documentoncreate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onCreate(handler)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Registers a function to fire when a document matching this path is created.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onCreate(handler: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>): <a href="#document">document</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>handler</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    that will be called on create.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#document">document</a></code>:
+        this document
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>doc.onCreate(<span class="hljs-function">(<span class="hljs-params">snapshot</span>)=&gt;</span> docToCreate.instance(snapshot.data()).set(snapshot.data()));</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='documentondelete'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onDelete(handler)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Registers a function to fire when a document matching this path is deleted.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onDelete(handler: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>): <a href="#document">document</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>handler</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    that will be called on delete.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#document">document</a></code>:
+        this document
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>doc.onDelete(<span class="hljs-function">(<span class="hljs-params">snapshot</span>)=&gt;</span> docToDelete.instance(snapshot.data()).delete());</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='documentonupdate'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onUpdate(handler)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Registers a function to fire when a document matching this path is updated.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onUpdate(handler: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>): <a href="#document">document</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>handler</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    that will be called on update.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#document">document</a></code>:
+        this document
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>doc.onUpdate(<span class="hljs-function">(<span class="hljs-params">change, context</span>)=&gt;</span> docToUpdate.instance(change.after.data()).update({<span class="hljs-attr">lastUpdated</span>: context.timestamp}));</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='documentonwrite'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>onWrite(handler)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Registers a function to fire when a document matching this path is created/deleted/updated.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>onWrite(handler: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>): <a href="#document">document</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>handler</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    that will be called on write.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#document">document</a></code>:
+        this document
 
       
     
@@ -901,6 +1050,52 @@ Note: The document object will be automatically inserted as the first argument.
     </div>
   
 </div>
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='documents'>
+      documents
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>All documents that will have their trigger handlers exported.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>documents</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
@@ -953,54 +1148,6 @@ Note: The document object will be automatically inserted as the first argument.
   
     <div class='py1 quiet mt1 prose-big'>Static Members</div>
     <div class="clearfix">
-  
-    <div class='border-bottom' id='firestorecollection'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>collection</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>A reference to the core firebase collection module.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>collection</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
   
     <div class='border-bottom' id='firestorecreatedocuments'>
       <div class="clearfix small pointer toggle-sibling">
@@ -1072,7 +1219,466 @@ Note: The document object will be automatically inserted as the first argument.
       </div>
     </div>
   
+    <div class='border-bottom' id='firestoreexport'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>export()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Export all available trigger handlers for each document as firestore cloud functions.
+Will support optimization/aggregation/naming options in the future.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>export(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        map of cloud functions
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
 </div>
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='extractpathparams'>
+      extractPathParams
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Parses a path string and returns a 'true' value map of the parameters encapsulated by {}.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>extractPathParams(string: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>string</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+            = <code>&quot;&quot;</code>)</code>
+	    is the path string
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></code>:
+        a 'true' value map of parameter names.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='injectpathargs'>
+      injectPathArgs
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Creates a new path with the encapsulated parameters replaced with arguments.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>injectPathArgs(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, args: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>, nameMap: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>
+            = <code>&quot;&quot;</code>)</code>
+	    is the path with potential parameters
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            = <code>{}</code>)</code>
+	    is a map of values to replace parameters with.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>nameMap</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>
+            = <code>{}</code>)</code>
+	    is an optional reference map for when arg keys do not match relevant param name.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></code>:
+        a new path with data in place of parameters.
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>util.injectPathArgs(<span class="hljs-string">'col/{docId}/list/{itemId}'</span>, {<span class="hljs-attr">userId</span>: <span class="hljs-string">'zach123'</span>, <span class="hljs-attr">achievementId</span>: <span class="hljs-string">'highscore'</span>}, {<span class="hljs-attr">docId</span>: <span class="hljs-string">'userId'</span>, <span class="hljs-attr">itemId</span>: <span class="hljs-string">'achievementId'</span>});</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='isvalidpath'>
+      isValidPath
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Checks if the path has an (even or odd) number of parts and has proper syntax.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>isValidPath(path: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, even: bool): bool</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    the document path to be verified.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>even</span> <code class='quiet'>(bool
+            = <code>true</code>)</code>
+	    if the path should have an even number of parts.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>bool</code>:
+        true if the document path is valid.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='node'>
+      node
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Defines a new function to be called on firestore.util.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>node(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, func: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    what this node shall be called.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>func</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    what this node will do.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>node(<span class="hljs-string">'add'</span>, (num1, num2) =&gt; num1+num2);</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='node'>
+      node
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Defines a new function to be called on functions.util.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>node(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, func: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    what this node shall be called.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>func</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    what this node will do.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>node(<span class="hljs-string">'add'</span>, (num1, num2) =&gt; num1+num2);</pre>
+    
+  
 
   
 
@@ -1096,7 +1702,7 @@ Note: The document object will be automatically inserted as the first argument.
   </div>
   
 
-  <p>This module contains references to all sub-modules.</p>
+  <p>This is the root module containing references to all function related sub-modules.</p>
 
  
   
@@ -1121,6 +1727,68 @@ Note: The document object will be automatically inserted as the first argument.
   
 
   
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='functionsexport'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>export()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Get all functions that will be deployed to firebase.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>export(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        cloud functions
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 

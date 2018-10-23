@@ -1,4 +1,4 @@
-var collection = require('../lib/functions/firestore/collection');
+var collection = require('../lib/firestore/collection');
 var chai = require('chai');
 chai.should();
 

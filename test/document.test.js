@@ -1,5 +1,6 @@
-var document = require('../lib/functions/firestore/document');
+var document = require('../lib/firestore/document');
 var chai = require('chai');
+chai.use(require('chai-as-promised'));
 chai.should();
 
 
@@ -48,7 +49,7 @@ describe('firestore.document', function(){
     });
   });
 
-  describe('#onCreate', function(){
+  describe('#onCreate()', function(){
     it('should throw if handler is nil or not a function', function(){
       chai.expect(temp.onCreate.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
       chai.expect(temp.onCreate.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
@@ -65,7 +66,7 @@ describe('firestore.document', function(){
     });
   });
 
-  describe('#onDelete', function(){
+  describe('#onDelete()', function(){
     it('should throw if handler is nil or not a function', function(){
       chai.expect(temp.onDelete.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
       chai.expect(temp.onDelete.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
@@ -82,7 +83,7 @@ describe('firestore.document', function(){
     });
   });
 
-  describe('#onUpdate', function(){
+  describe('#onUpdate()', function(){
     it('should throw if handler is nil or not a function', function(){
       chai.expect(temp.onUpdate.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
       chai.expect(temp.onUpdate.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
@@ -99,7 +100,7 @@ describe('firestore.document', function(){
     });
   });
 
-  describe('#onWrite', function(){
+  describe('#onWrite()', function(){
     it('should throw if handler is nil or not a function', function(){
       chai.expect(temp.onWrite.bind(temp, null)).to.throw().with.property('message', document.errors.badTriggerInput.message);
       chai.expect(temp.onWrite.bind(temp, 'notafunction')).to.throw().with.property('message', document.errors.badTriggerInput.message);
@@ -115,4 +116,33 @@ describe('firestore.document', function(){
       temp._onWriteHandlers.pop().should.equal(sayHello);
     });
   });
-})
+
+  var doc;
+  describe('#get()', function(){
+    before(function(){
+      doc = temp.instance({userId: 'kole', characterId: 'zabeebo'});
+    });
+
+    it('should return a promise which resolves', function(){
+      return doc.get().should.be.fulfilled;
+    });
+
+    it('should return an object with standard properties', function(){
+      return doc.get().should.eventually.have.all.keys(['id', 'exists', 'data', 'ref']);
+    });
+
+  });
+
+  describe('#set()', function(){
+    it('should return a promise which resolves', function(){
+      return doc.set({timestamp: new Date()}).should.be.fulfilled;
+    });
+
+    it('should write proper data to the database', function(){
+        return doc.get().should.eventually.satisfy(function(doc){
+          return doc.data().userId == 'kole' && doc.data().characterId == 'zabeebo';
+        });
+    });
+  });
+
+});

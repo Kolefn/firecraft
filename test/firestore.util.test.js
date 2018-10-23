@@ -1,4 +1,4 @@
-const { util } = require('../lib/functions/firestore');
+const { util } = require('../lib/firestore');
 const chai = require('chai');
 chai.should();
 

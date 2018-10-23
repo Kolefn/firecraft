@@ -1,4 +1,4 @@
-var firestore = require('../lib/functions/firestore');
+var firestore = require('../lib/firestore');
 var chai = require('chai');
 chai.should();
 

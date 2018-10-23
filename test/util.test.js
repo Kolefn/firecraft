@@ -1,4 +1,4 @@
-const { util } = require('../lib/functions');
+const { util } = require('../lib');
 var chai = require('chai');
 chai.should();
 
