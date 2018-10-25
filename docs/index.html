@@ -118,6 +118,18 @@
                         #onWrite
                       </a></li>
                       
+                      <li><a
+                        href='#documentset'
+                        class='regular pre-open'>
+                        #set
+                      </a></li>
+                      
+                      <li><a
+                        href='#documentget'
+                        class='regular pre-open'>
+                        #get
+                      </a></li>
+                      
                     </ul>
                   
                   
@@ -195,16 +207,6 @@
                   href='#isvalidpath'
                   class="">
                   isValidPath
-                  
-                </a>
-                
-                </li>
-              
-                
-                <li><a
-                  href='#node'
-                  class="">
-                  node
                   
                 </a>
                 
@@ -1049,6 +1051,143 @@ fullfil path parameters with provided data &#x26; map.</p>
       </div>
     </div>
   
+    <div class='border-bottom' id='documentset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>set(data, options)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Writes data to this path in the database.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>set(data: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, options: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    to be written at this path.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    to customize how data is written.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        resolves with void once data is succesfully written.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='documentget'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>get()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Retrieves existing data at this path in database.</p>
+
+ 
+  
+    <div class='pre p1 fill-light mt0'>get(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></div>
+   
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></code>:
+        resolves with 
+[DocumentSnapshot]
+<a href="https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference">https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentReference</a>
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
 </div>
 
   
@@ -1617,83 +1756,6 @@ Will support optimization/aggregation/naming options in the future.</p>
   
   <div class='clearfix'>
     
-    <h3 class='fl m0' id='node'>
-      node
-    </h3>
-    
-    
-  </div>
-  
-
-  <p>Defines a new function to be called on functions.util.</p>
-
- 
-  
-    <div class='pre p1 fill-light mt0'>node(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, func: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</div>
-   
-  
-  
-
-  
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    what this node shall be called.
-
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>func</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
-	    what this node will do.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>node(<span class="hljs-string">'add'</span>, (num1, num2) =&gt; num1+num2);</pre>
-    
-  
-
-  
-
-  
-
-  
-</section>
-
-        
-          
-          <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-  <div class='clearfix'>
-    
     <h3 class='fl m0' id='functions'>
       functions
     </h3>
@@ -1744,7 +1806,7 @@ Will support optimization/aggregation/naming options in the future.</p>
 
   
 
-  <p>Get all functions that will be deployed to firebase.</p>
+  <p>Get all cloud functions that will be deployed.</p>
 
  
   

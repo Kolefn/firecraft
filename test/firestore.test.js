@@ -3,6 +3,7 @@ var chai = require('chai');
 chai.should();
 
 describe('firestore', function(){
+
   describe('#createDocuments()', function(){
     it('should produce an object for each path supplied.', function(){
       return firestore.createDocuments({doc1: 'first/{path}', doc2: 'second/{path}'}).should.have.all.keys('doc1', 'doc2');

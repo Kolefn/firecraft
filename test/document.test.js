@@ -121,6 +121,7 @@ describe('firestore.document', function(){
   describe('#get()', function(){
     before(function(){
       doc = temp.instance({userId: 'kole', characterId: 'zabeebo'});
+      return true;
     });
 
     it('should return a promise which resolves', function(){
@@ -128,7 +129,7 @@ describe('firestore.document', function(){
     });
 
     it('should return an object with standard properties', function(){
-      return doc.get().should.eventually.have.all.keys(['id', 'exists', 'data', 'ref']);
+      return doc.get().should.eventually.respondTo('data');
     });
 
   });
@@ -140,9 +141,26 @@ describe('firestore.document', function(){
 
     it('should write proper data to the database', function(){
         return doc.get().should.eventually.satisfy(function(doc){
-          return doc.data().userId == 'kole' && doc.data().characterId == 'zabeebo';
+          return doc.data().timestamp.constructor.name.should.equal('Timestamp');
         });
     });
+  });
+
+  describe("#toReference()", function(){
+    it('should throw if a parameter is in provided path.', function(){
+      chai.expect(document.toReference.bind(temp, temp.path)).to.throw().with.property('message', document.errors.badReferencePath.message);
+    });
+
+    it('should throw if a collection path is provided.', function(){
+      chai.expect(document.toReference.bind(temp, temp.path + "/somecollection")).to.throw().with.property('message', document.errors.badPath.message);
+    });
+
+    it('should return a standard firestore document reference object', function(){
+      let ref = document.toReference(doc.path);
+      ref.should.respondTo('collection');
+      ref.should.have.property('id', 'zabeebo');
+    });
+
   });
 
 });
