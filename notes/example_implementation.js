@@ -53,8 +53,8 @@ docs.postHide.delete(docs.userVote, {contentId: 'postId'});
 docs.commentHide.delete(docs.userVote, {contentId: 'commentId'});
 
 /* DEPENDENCIES */
-docs.post.dependent(docs.post.child('*'));
-docs.postComment.dependent(docs.post.child('*'));
+docs.post.dependent(docs.post.child('{collectionId}'));
+docs.postComment.dependent(docs.post.child('{collectionId}'));
 docs.packNotification.dependent(docs.packNotificationRead);
 
 /* COUNTERS */

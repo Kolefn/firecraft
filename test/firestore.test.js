@@ -10,7 +10,7 @@ describe('firestore', function(){
     });
 
     it('should produce valid document objects', function(){
-      return firestore.createDocuments({doc1: 'col/{docId}'}).doc1.should.be.an.instanceOf(firestore.collection.document);
+      return firestore.createDocuments({doc1: 'col/{docId}'}).doc1.should.be.an.instanceOf(firestore.document);
     });
   });
 

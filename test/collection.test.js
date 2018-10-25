@@ -30,11 +30,4 @@ describe('firestore.collection', function(){
     });
   });
 
-
-  describe('#document', function(){
-    it('should return the STATIC document class', function(){
-      collection.document.should.not.be.an.instanceOf(collection.document);
-      collection.document.prototype.constructor.name.should.equal('document');
-    });
-  });
 })
