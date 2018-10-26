@@ -181,4 +181,32 @@ describe('firestore.document', function(){
 
   });
 
+
+  describe("#isValidPath", function(){
+    it('should return true if document path is provided', function(){
+      return document.isValidPath(['users', '{userId}']).should.be.ok();
+    });
+
+    it('should return false if collection path is provided', function(){
+      return document.isValidPath(['users', '{userId}', 'characters']).should.not.be.ok();
+    });
+  });
+
+  describe("#isValidRelativePath", function(){
+    it('should return true if document path is provided', function(){
+      return document.isRelativePathValid(['users', '{userId}']).should.be.ok();
+    });
+
+    it('should return false if collection path is provided', function(){
+      return document.isRelativePathValid(['users', '{userId}', 'characters']).should.not.be.ok();
+    });
+  });
+
+
+  describe('#childClass', function(){
+    it('should return the collection class constructor', function(){
+      return chai.expect(()=>document.childClass).should.equal(collection);
+    });
+  });
+
 });
