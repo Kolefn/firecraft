@@ -28,19 +28,13 @@ describe('firestore.document', function(){
     });
   });
 
-  describe('#node()', function(){
-    it('should create a new function of the given name.', function(){
-      document.node('test', ()=> 1);
-      characterDoc.test.should.be.a('function');
+  describe('#collection()', function(){
+    it('should return a collection object', function(){
+      characterDoc.collection('traits').should.be.an.instanceOf(collection);
+      characterDoc.collection('traits/{traitId}/statistics').should.be.an.instanceOf(collection);
     });
-
-    it('should create a new function that returns properly.', function(){
-      characterDoc.test().should.equal(1);
-    });
-
-    it('should provide document instance as first argument.', function(){
-      document.node('test', (specialCharacter)=> specialCharacter.should.be.an.instanceOf(document));
-      characterDoc.test(1,2,3);
+    it('should throw if relative path does not point to a colleciton', function(){
+      characterDoc.collection('traits/{traitId}').should.throw();
     });
   });
 

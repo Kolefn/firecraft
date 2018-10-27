@@ -1,5 +1,5 @@
-const collection = require('../lib/firestore/collection');
-const document = require('../lib/firestore/document');
+const {collection, document} = require('../lib/firestore');
+const reference = require('../lib/firestore/reference');
 const chai = require('chai');
 chai.should();
 
@@ -22,88 +22,46 @@ describe('firestore.collection', function(){
 
   describe('#parent', function(){
     it('should return the parent document object after first and consequtive uses.', function(){
-      characters.parent.should.be.an.instanceOf(document).with.property('path', 'users/{userId}');
-      characters.parent.should.be.an.instanceOf(document);
+      let parent = characters.parent;
+      parent.should.be.an.instanceOf(document);
+      parent._path.should.have.property('_string', 'users/{userId}');
     });
   });
 
-  describe('#extend()', function(){
-    it('should return a document if input path has odd segments', function(){
-      characters.extend('{characterId}').should.be.an.instanceOf(document);
+  describe('#document()', function(){
+    it('should return a document object', function(){
+      characters.document('{traitId}').should.be.an.instanceOf(document);
+      characters.document('{traitId}/statistics/{statId}').should.be.an.instanceOf(document);
     });
-
-    it('should return a collection if input path has even segments', function(){
-      characters.extend('{characterId}/traits').should.be.an.instanceOf(collection);
-    });
-
-    it('should throw if a path input is not a string', function(){
-      chai.expect(characters.extend.bind(characters, null)).to.throw().with.property('message', collection.errors.badPath.message);
+    it('should throw if relative path does not point to a document', function(){
+      chai.expect(()=> characters.document('{traitId}/statistics')).to.throw();
     });
   });
 
-  describe('#node()', function(){
-    it('should create a new function of the given name.', function(){
-      collection.node('test', ()=> 1);
-      characters.test.should.be.a('function');
-    });
-
-    it('should create a new function that returns properly.', function(){
-      characters.test().should.equal(1);
-    });
-
-    it('should provide collection instance as first argument.', function(){
-      collection.node('test', (col)=> col.should.be.an.instanceOf(collection));
-      characters.test(1,2,3);
-    });
-
-    it('the defined node should return collection when provided node function does not return a value.', function(){
-      collection.node('test', (col)=> { let x = 1 + 2; });
-      characters.test().should.be.an.instanceOf(collection);
-    })
-
-  });
-
-  var instance;
   describe('#instance()', function(){
     it('should at least return a copy of the collection object', function(){
-      characters.instance().should.be.an.instanceOf(collection).with.property('path', characters.path);
+      let instance = characters.instance();
+      instance.should.be.an.instanceOf(collection);
+      instance._path.should.have.property('_string', characters._path._string);
     });
 
     it('should return a new collection with provided arguments in place of path parameters', function(){
-      instance = characters.instance({userId: 'kole'}).should.be.an.instanceOf(collection).with.property("path", "users/kole/characters");
+      let myCharacters = characters.instance({userId: 'kole'});
+      myCharacters.should.be.an.instanceOf(collection);
+      myCharacters._path.should.have.property("_string", "users/kole/characters");
     });
   });
 
   describe("#reference", function(){
     it('should throw if a parameter is in provided path.', function(){
-      chai.expect(()=> characters.reference).to.throw().with.property('message', collection.errors.badReferencePath.message);
+      chai.expect(()=> characters.reference).to.throw().with.property('message', reference.errors.parameterInPath.message);
     });
 
     it('should return a standard firestore document reference object', function(){
-      chai.expect(()=> instance.reference).should.respondTo('doc');
-      chai.expect(()=> instance.reference).should.have.property('id', 'characters');
+      let myCharacters = characters.instance({userId: 'kole'});
+      myCharacters.reference.should.respondTo('doc');
+      myCharacters.reference.should.have.property('id', 'characters');
     });
   });
 
-  describe("#isValidPath", function(){
-    it('should return false if document path is provided', function(){
-      return collection.isValidPath(['users', '{userId}']).should.not.be.ok;
-    });
-
-    it('should return true if collection path is provided', function(){
-      return collection.isValidPath(['users', '{userId}', 'characters']).should.be.ok;
-    });
-  });
-
-  describe("#isValidRelativePath", function(){
-    it('should return false if document path is provided', function(){
-      return collection.isRelativePathValid(['{userId}']).should.not.be.ok;
-    });
-
-    it('should return true if collection path is provided', function(){
-      return collection.isRelativePathValid(['{userId}', 'characters']).should.be.ok;
-    });
-  });
-
-
-})
+});
