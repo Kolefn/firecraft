@@ -34,7 +34,7 @@ describe('firestore.document', function(){
       characterDoc.collection('traits/{traitId}/statistics').should.be.an.instanceOf(collection);
     });
     it('should throw if relative path does not point to a colleciton', function(){
-      characterDoc.collection('traits/{traitId}').should.throw();
+      chai.expect(()=> characterDoc.collection('traits/{traitId}')).to.throw();
     });
   });
 
