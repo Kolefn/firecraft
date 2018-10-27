@@ -51,6 +51,10 @@ describe('path', function(){
       new path('col/{docId}/list/{itemId}').insertArgs({userId: 'zach123', achievementId: 'highscore'}, {docId: 'userId', itemId: 'achievementId'})
         .should.be.an.instanceOf(path).with.property("_string", "col/zach123/list/highscore");
     });
+
+    it('should return a copy if no args input provided', function(){
+      new path('users/{userId}').insertArgs().should.be.an.instanceOf(path).with.property("_string", 'users/{userId}');
+    });
   });
 
 });

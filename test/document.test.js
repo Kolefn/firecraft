@@ -1,4 +1,5 @@
 const {collection, document} = require('../lib/firestore');
+const reference = require('../lib/firestore/reference');
 const chai = require('chai');
 chai.use(require('chai-as-promised'));
 chai.should();
@@ -20,23 +21,10 @@ describe('firestore.document', function(){
   });
 
   describe('#parent', function(){
-    it('should return the parent collection object after first and consequtive uses.', function(){
-      characterDoc.parent.should.be.an.instanceOf(collection).with.property('path', 'users/{userId}/characters');
-      characterDoc.parent.should.be.an.instanceOf(collection);
-    });
-  });
-
-  describe('#extend()', function(){
-    it('should return a collection if input path has odd segments', function(){
-      characterDoc.extend('traits').should.be.an.instanceOf(collection);
-    });
-
-    it('should return a document if input path has even segments', function(){
-      characterDoc.extend('traits/{traitId}').should.be.an.instanceOf(document);
-    });
-
-    it('should throw if a path input is not a string', function(){
-      chai.expect(characterDoc.extend.bind(characterDoc, null)).to.throw().with.property('message', document.errors.badPath.message);
+    it('should return the parent collection object', function(){
+      let parent = characterDoc.parent;
+      parent.should.be.an.instanceOf(collection);
+      parent._path.should.have.property('_string', 'users/{userId}/characters');
     });
   });
 
@@ -58,11 +46,15 @@ describe('firestore.document', function(){
 
   describe('#instance()', function(){
     it('should at least return a copy of the document object', function(){
-      characterDoc.instance().should.be.an.instanceOf(document).with.property('path', characterDoc.path);
+      let instance = characterDoc.instance();
+      instance.should.be.an.instanceOf(document);
+      instance._path.should.have.property('_string', characterDoc._path._string);
     });
 
     it('should return a new document with provided arguments in place of path parameters', function(){
-      characterDoc.instance({userId: 'kole', characterId: 'zabeebo'}).should.be.an.instanceOf(document).with.property("path", "users/kole/characters/zabeebo");
+      let specialCharacter = characterDoc.instance({userId: 'kole', characterId: 'zabeebo'});
+      specialCharacter.should.be.an.instanceOf(document);
+      specialCharacter._path.should.have.property("_string", "users/kole/characters/zabeebo");
     });
   });
 
@@ -171,7 +163,7 @@ describe('firestore.document', function(){
 
   describe("#reference", function(){
     it('should throw if a parameter is in provided path.', function(){
-      chai.expect(()=> characterDoc.reference).to.throw().with.property('message', document.errors.badReferencePath.message);
+      chai.expect(()=> characterDoc.reference).to.throw().with.property('message', reference.errors.parameterInPath.message);
     });
 
     it('should return a standard firestore document reference object', function(){
@@ -179,34 +171,6 @@ describe('firestore.document', function(){
       specialCharacter.reference.should.have.property('id', 'zabeebo');
     });
 
-  });
-
-
-  describe("#isValidPath", function(){
-    it('should return true if document path is provided', function(){
-      return document.isValidPath(['users', '{userId}']).should.be.ok();
-    });
-
-    it('should return false if collection path is provided', function(){
-      return document.isValidPath(['users', '{userId}', 'characters']).should.not.be.ok();
-    });
-  });
-
-  describe("#isValidRelativePath", function(){
-    it('should return true if document path is provided', function(){
-      return document.isRelativePathValid(['users', '{userId}']).should.be.ok();
-    });
-
-    it('should return false if collection path is provided', function(){
-      return document.isRelativePathValid(['users', '{userId}', 'characters']).should.not.be.ok();
-    });
-  });
-
-
-  describe('#childClass', function(){
-    it('should return the collection class constructor', function(){
-      return chai.expect(()=>document.childClass).should.equal(collection);
-    });
   });
 
 });
