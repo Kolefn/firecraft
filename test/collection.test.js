@@ -1,6 +1,7 @@
 const {collection, document} = require('../lib/firestore');
 const reference = require('../lib/firestore/reference');
 const chai = require('chai');
+chai.use(require('chai-as-promised'));
 chai.should();
 
 
@@ -61,6 +62,45 @@ describe('firestore.collection', function(){
       let myCharacters = characters.instance({userId: 'kole'});
       myCharacters.reference.should.respondTo('doc');
       myCharacters.reference.should.have.property('id', 'characters');
+    });
+  });
+
+  describe('#get()', function(){
+    let myCharacters;
+    it('should fetch all documents when no options provided', function(){
+       myCharacters = characters.instance({userId: 'kole'});
+      return myCharacters.get().then((snap)=> {
+        snap.should.have.property('size');
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+
+    it('should return QuerySnapshot using orderBy', function(){
+      return myCharacters.get({orderBy: 'timestamp'}).then((snap)=> {
+        snap.should.have.property('size');
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+
+    it('should return QuerySnapshot using orderBy w/ direction', function(){
+      return myCharacters.get({orderBy: ['timestamp', 'asc']}).then((snap)=> {
+        snap.should.have.property('size');
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+
+    it('should return proper QuerySnapshot using orderBy w/ limit', function(){
+      return myCharacters.get({orderBy: ['timestamp', 'asc'], limit: 1}).then((snap)=> {
+        snap.should.have.property('size', 1);
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+
+    it('should return QuerySnapshot for where query', function(){
+      return myCharacters.get({orderBy: ['timestamp', 'asc'], where: ['public', '==', true]}).then((snap)=> {
+        snap.should.have.property('size', 0);
+        return Promise.resolve();
+      }).should.be.fulfilled;
     });
   });
 

@@ -23,4 +23,7 @@ auto stubbing in offline test mode / optional "test" root collection for online 
 auto convert writes to batch
 
 
+built-in double-trigger prevention & easier retry logic
+
+
 get takes query options (e.g. .get({limit: 10, where: [field, '==', true]}))
