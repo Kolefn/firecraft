@@ -19,6 +19,12 @@ describe('path', function(){
     });
   });
 
+  describe('#last', function(){
+    it('should return the last segment string', function(){
+      sample.last.should.equal('{characterId}');
+    });
+  });
+
   describe('#getSegments()', function(){
     it('should return a COPY of the internal path segments array', function(){
       sample.getSegments().should.be.satisfy(Array.isArray);

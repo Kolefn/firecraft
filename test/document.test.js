@@ -189,7 +189,12 @@ describe('firestore.document', function(){
       specialCharacter.reference.should.respondTo('collection');
       specialCharacter.reference.should.have.property('id', 'zabeebo');
     });
+  });
 
+  describe('#id', function(){
+    it('should return the document\'s id string', function(){
+      specialCharacter.id.should.be.a('string').equal('zabeebo');
+    });
   });
 
   describe('#fromReference', function(){

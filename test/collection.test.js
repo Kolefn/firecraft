@@ -30,10 +30,18 @@ describe('firestore.collection', function(){
   });
 
   describe('#document()', function(){
+
+    it('should return a document with a randomly generated id if no path specified.', function(){
+      let doc = characters.instance({userId: 'kole'}).document();
+      doc.should.be.an.instanceOf(document);
+      doc.id.should.be.a('string');
+    });
+
     it('should return a document object', function(){
       characters.document('{traitId}').should.be.an.instanceOf(document);
       characters.document('{traitId}/statistics/{statId}').should.be.an.instanceOf(document);
     });
+
     it('should throw if relative path does not point to a document', function(){
       chai.expect(()=> characters.document('{traitId}/statistics')).to.throw();
     });
