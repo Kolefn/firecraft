@@ -17,4 +17,13 @@ describe('reference', function(){
       chai.expect(()=> reference.parse(new path('users/{userId}'))).to.throw();
     });
   });
+
+  describe('#getPath()', function(){
+    it('should return a path object from a DocumentReference', function(){
+      let path1 = new path('users/kole');
+      let ref = reference.parse(path1);
+      let path2 = reference.getPath(ref);
+      path1._string.should.equal(path2._string);
+    });
+  });
 });

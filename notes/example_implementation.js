@@ -188,7 +188,7 @@ functions.runWith({ timeoutSeconds: 540,memory: '2GB',})
       let options = {batchSize, orderBy: 'reputation', direction: 'asc'}
       return docs.packRanking.collection.instance({packId: packDoc.id}).forEachDocument((rankDoc, i)=> {
         //convert to framework reference to exploit underlying optimizations such as auto batch writes
-        return functions.firestore.reference(rankDoc.ref).update({rank: i, }, {batch});
+        return functions.firestore.document.fromReference(rankDoc.ref).update({rank: i, }, {batch});
       }, options);
     }).then(batch.commit);
   }, {batchSize})

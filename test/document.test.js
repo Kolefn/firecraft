@@ -192,4 +192,13 @@ describe('firestore.document', function(){
 
   });
 
+  describe('#fromReference', function(){
+    it('should return a document matching the passed reference', function(){
+      let doc = document.fromReference(specialCharacter.reference);
+      doc.should.be.an.instanceOf(document);
+      doc._path._string.should.equal(specialCharacter._path._string);
+    });
+  });
+
+
 });

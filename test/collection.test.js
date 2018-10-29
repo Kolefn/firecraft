@@ -40,7 +40,7 @@ describe('firestore.collection', function(){
   });
 
   describe('#instance()', function(){
-    it('should at least return a copy of the collection object', function(){
+    it('should return a copy of the collection object when no arguments provided.', function(){
       let instance = characters.instance();
       instance.should.be.an.instanceOf(collection);
       instance._path.should.have.property('_string', characters._path._string);
@@ -124,5 +124,7 @@ describe('firestore.collection', function(){
     });
 
   });
+
+  //describe('#add()');
 
 });
