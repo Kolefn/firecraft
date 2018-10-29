@@ -97,11 +97,32 @@ describe('firestore.collection', function(){
     });
 
     it('should return QuerySnapshot for where query', function(){
-      return myCharacters.get({orderBy: ['timestamp', 'asc'], where: ['public', '==', true]}).then((snap)=> {
+      return myCharacters.get({where: ['public', '==', true]}).then((snap)=> {
         snap.should.have.property('size', 0);
         return Promise.resolve();
       }).should.be.fulfilled;
     });
+
+    it('should return QuerySnapshot for double where query', function(){
+      return myCharacters.get({where: ['public', '==', true, 'visible', '==', true]}).then((snap)=> {
+        snap.should.have.property('size', 0);
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+
+    //it('should now return a proper QuerySnapshot for all derivations of where method.');
+
+    it('should return proper QuerySnapshot for startAfter query', function(){
+      return myCharacters.get({orderBy: ['timestamp', 'asc']}).then((snap)=> {
+        let data = []
+        snap.forEach((doc)=> data.push(doc.data().timestamp));
+        return myCharacters.get({orderBy: ['timestamp', 'asc'], startAfter: data[0]}).then((afterSnap)=> {
+          afterSnap.should.have.property('size', 1);
+          return Promise.resolve();
+        })
+      }).should.be.fulfilled;
+    });
+
   });
 
 });
