@@ -176,7 +176,7 @@ functions.https.onCall('processInviteReceipt', (data, context)=> {
 functions.runWith({ timeoutSeconds: 540,memory: '2GB',})
 .pubsub.topic('daily-tick').onPublish('calculateRankings', (message)=> {
   let batchSize = 10;
-  let batch = functions.firestore.document.batch();
+  let batch = new functions.firestore.batch();
   return docs.pack.collection.forEachDocument((packDoc)=> {
     return docs.packUser.collection.instance({packId: packDoc.id}).forEachDocument((userDoc)=> {
       let instanceData = {userId: userDoc.id, packId: packDoc.id};

@@ -1,4 +1,4 @@
-const {collection, document} = require('../lib/firestore');
+const {collection, document, batch} = require('../lib/firestore');
 const reference = require('../lib/firestore/reference');
 const chai = require('chai');
 chai.use(require('chai-as-promised'));
@@ -138,6 +138,7 @@ describe('firestore.document', function(){
   });
 
   describe('#set()', function(){
+    //let specialCharacter = new document('users/kole/characters/zabeebo');
     it('should return a promise which resolves', function(){
       return specialCharacter.set({timestamp: new Date()}).should.be.fulfilled;
     });
@@ -148,10 +149,34 @@ describe('firestore.document', function(){
         });
     });
 
-    // it('should write to a batch if batch is included in options.', function(){
-    //     let batch =
-    //     return specialCharacter.set({batchTest: true});
-    // });
+    it('should add set to provided batch', function(){
+      let b = new batch();
+      specialCharacter.set({batchSet: new Date()}, {batch: b}).should.be.fulfilled;
+      b.writes.should.equal(1);
+    });
+  });
+
+
+  describe('#update()', function(){
+    let rand;
+    //let specialCharacter = new document('users/kole/characters/zabeebo');
+    it('should return a promise which resolves', function(){
+      rand = Math.random().toFixed(4);
+      return specialCharacter.update({updated: rand});
+    });
+
+    it('should update proper data in the database', function(){
+      return specialCharacter.get().then((doc)=> {
+         doc.data().updated.should.equal(rand);
+         return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+
+    it('should write update to provided batch', function(){
+      let b = new batch();
+      specialCharacter.update({batchUpdate: new Date()}, {batch: b}).should.be.fulfilled;
+      b.writes.should.equal(1);
+    });
   });
 
 
