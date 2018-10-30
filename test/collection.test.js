@@ -131,10 +131,26 @@ describe('firestore.collection', function(){
   });
 
   describe('#iterate()', function(){
-    it('should fire the provided callback with a document snapshot');
-    it('should return a promise that resolves once all batches have been iterated');
-    it('should reject with last document of succesful iteration');
-    it('should accept all query options like get()');
+    it('should fire the provided callback with a document snapshot', function(){
+      myCharacters.iterate((doc)=> doc.should.respondTo('data'));
+    });
+    
+    it('should return a promise that resolves once all batches have been iterated', function(){
+      let its = 0;
+      myCharacters.iterate((doc)=> its++, {limit: 1}).then(()=> {
+        its.should.equal(2);
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+
+    it('should reject with last document of iteration', function(){
+      myCharacters.iterate((doc)=> return Promise.reject()).should.be.rejected.respondTo('data');
+    });
+
+    it('should accept all query options like get()', function(){
+      myCharacters.iterate((doc)=> doc.should.respondTo('data'), {orderBy: ['timestamp', 'asc'], where: ['public', '==', true]})
+      .should.be.fulfilled;
+    });
   });
 
   describe("#reference", function(){
