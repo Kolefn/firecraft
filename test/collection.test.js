@@ -47,6 +47,15 @@ describe('firestore.collection', function(){
     });
   });
 
+  describe('#add()', function(){
+    it('should create a new document with a random id', function(){
+      characters.instance({userId: 'kole'}).add({skillPoints: 10}).then((ref)=> {
+        ref.should.have.a.property('id').respondTo('get');
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+  });
+
   describe('#instance()', function(){
     it('should return a copy of the collection object when no arguments provided.', function(){
       let instance = characters.instance();
@@ -58,18 +67,6 @@ describe('firestore.collection', function(){
       let myCharacters = characters.instance({userId: 'kole'});
       myCharacters.should.be.an.instanceOf(collection);
       myCharacters._path.should.have.property("_string", "users/kole/characters");
-    });
-  });
-
-  describe("#reference", function(){
-    it('should throw if a parameter is in provided path.', function(){
-      chai.expect(()=> characters.reference).to.throw().with.property('message', reference.errors.parameterInPath.message);
-    });
-
-    it('should return a standard firestore document reference object', function(){
-      let myCharacters = characters.instance({userId: 'kole'});
-      myCharacters.reference.should.respondTo('doc');
-      myCharacters.reference.should.have.property('id', 'characters');
     });
   });
 
@@ -133,6 +130,24 @@ describe('firestore.collection', function(){
 
   });
 
-  //describe('#add()');
+  describe('#iterate()', function(){
+    it('should fire the provided callback with a document snapshot');
+    it('should return a promise that resolves once all batches have been iterated');
+    it('should reject with last document of succesful iteration');
+    it('should accept all query options like get()');
+  });
+
+  describe("#reference", function(){
+    it('should throw if a parameter is in provided path.', function(){
+      chai.expect(()=> characters.reference).to.throw().with.property('message', reference.errors.parameterInPath.message);
+    });
+
+    it('should return a standard firestore document reference object', function(){
+      let myCharacters = characters.instance({userId: 'kole'});
+      myCharacters.reference.should.respondTo('doc');
+      myCharacters.reference.should.have.property('id', 'characters');
+    });
+  });
+
 
 });

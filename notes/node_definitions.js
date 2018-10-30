@@ -1,11 +1,11 @@
-
+const { invert } = require('./lodash');
 /* COUPLE NODE BREAKDOWN */
 
 functions.firestore.document.node('couple', (doc, docToCouple, mapping)=> {
   doc.create(docToCouple, mapping);
   doc.dependent(docToCouple, mapping);
-  docToCouple.create(doc.name, functions.util.inverseMap(mapping));
-  docToCouple.dependent(doc.name, functions.util.inverseMap(mapping));
+  docToCouple.create(doc.name, invert(mapping));
+  docToCouple.dependent(doc.name, invert(mapping));
 });
 
 

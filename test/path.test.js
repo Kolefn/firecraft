@@ -19,7 +19,7 @@ describe('path', function(){
     });
   });
 
-  describe('#last', function(){
+  describe('#end', function(){
     it('should return the last segment string', function(){
       sample.last.should.equal('{characterId}');
     });
