@@ -1,2 +1,2 @@
-# untitled-firebase-project
-A framework for better firebase cloud functions.
+# FireCraft
+A framework for better Firebase Cloud Functions.
