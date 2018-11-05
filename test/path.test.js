@@ -21,7 +21,7 @@ describe('path', function(){
 
   describe('#end', function(){
     it('should return the last segment string', function(){
-      sample.last.should.equal('{characterId}');
+      sample.end.should.equal('{characterId}');
     });
   });
 

@@ -7,10 +7,10 @@ describe('component', function(){
   before(function(){
     comp = new component();
   });
-  
-  describe('#node()', function(){
+
+  describe('#extend()', function(){
     it('should create a new function of the given name.', function(){
-      component.node('test', ()=> 1);
+      component.extend('test', ()=> 1);
       comp.test.should.be.a('function');
     });
 
@@ -19,12 +19,12 @@ describe('component', function(){
     });
 
     it('should provide component instance as first argument.', function(){
-      component.node('test', (col)=> col.should.be.an.instanceOf(component));
+      component.extend('test', (col)=> col.should.be.an.instanceOf(component));
       comp.test(1,2,3);
     });
 
     it('the defined node should return component when provided node function does not return a value.', function(){
-      component.node('test', (col)=> { let x = 1 + 2; });
+      component.extend('test', (col)=> { let x = 1 + 2; });
       comp.test().should.be.an.instanceOf(component);
     })
   });
