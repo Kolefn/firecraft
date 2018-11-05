@@ -50,7 +50,8 @@ describe('firestore.collection', function(){
   describe('#add()', function(){
     it('should create a new document with a random id', function(){
       characters.instance({userId: 'kole'}).add({skillPoints: 10}).then((ref)=> {
-        ref.should.have.a.property('id').respondTo('get');
+        ref.should.respondTo('get');
+        ref.should.have.property('id');
         return Promise.resolve();
       }).should.be.fulfilled;
     });
