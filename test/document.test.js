@@ -179,6 +179,17 @@ describe('firestore.document', function(){
     });
   });
 
+  describe('#transaction()', function(){
+    it('should accept a function which is passed a Transaction, DocumentSnapshot, DocumentReference', function(){
+      specialCharacter.transaction((t, doc, ref)=> {
+        t.constructor.name.should.equal('Transaction');
+        doc.constructor.name.should.equal('QueryDocumentSnapshot');
+        ref.constructor.name.should.equal('DocumentReference');
+        return Promise.resolve();
+      }).should.be.fulfilled;
+    });
+  });
+
 
   describe("#reference", function(){
     it('should throw if a parameter is in provided path.', function(){
