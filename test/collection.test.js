@@ -115,8 +115,6 @@ describe('firestore.collection', function(){
       }).should.be.fulfilled;
     });
 
-    //it('should now return a proper QuerySnapshot for all derivations of where method.');
-
     it('should return proper QuerySnapshot for startAfter query', function(){
       return myCharacters.get({orderBy: ['timestamp', 'asc']}).then((snap)=> {
         let data = []
@@ -131,10 +129,14 @@ describe('firestore.collection', function(){
   });
 
   describe('#iterate()', function(){
+    var myCharacters;
+    before(function(){
+      myCharacters = characters.instance({userId: 'kole'});
+    })
     it('should fire the provided callback with a document snapshot', function(){
       myCharacters.iterate((doc)=> doc.should.respondTo('data'));
     });
-    
+
     it('should return a promise that resolves once all batches have been iterated', function(){
       let its = 0;
       myCharacters.iterate((doc)=> its++, {limit: 1}).then(()=> {
@@ -144,7 +146,9 @@ describe('firestore.collection', function(){
     });
 
     it('should reject with last document of iteration', function(){
-      myCharacters.iterate((doc)=> return Promise.reject()).should.be.rejected.respondTo('data');
+      myCharacters.iterate((doc)=> Promise.reject()).catch((doc)=>{
+        doc.should.respondTo('data');
+      });
     });
 
     it('should accept all query options like get()', function(){
