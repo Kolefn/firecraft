@@ -2,4 +2,4 @@ language: node_js
 node_js:
   - "lts/*"
 before_script:
-  - firebase use kolecreates
+  - firebase use kolecreates --token $FIREBASE_CI_TOKEN
