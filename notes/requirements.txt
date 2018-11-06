@@ -26,5 +26,7 @@ auto inject certain data
 
 built-in double-trigger prevention & easier retry logic
 
+quick admin/auth requirement wrapping
+
 
 get takes query options (e.g. .get({limit: 10, where: [field, '==', true]}))
