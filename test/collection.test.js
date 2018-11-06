@@ -123,7 +123,7 @@ describe('firestore.collection', function(){
       myCharacters.delete().should.be.rejected;
     });
 
-    it('should shallow delete all documents in collection when recursive set to false', function(){
+    it.skip('should shallow delete all documents in collection when recursive set to false', function(){
       return myCharacters.delete({yes: true, recursive: false}).then(()=> {
         return myCharacters.get().then((snap)=> {
           return snap.size == 0 ? Promise.resolve() : Promise.reject();
