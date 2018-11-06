@@ -179,11 +179,26 @@ describe('firestore.document', function(){
     });
   });
 
+
+  describe('#delete()', function(){
+    it('should return a promise which resolves once data is deleted', function(){
+      return specialCharacter.delete().then(()=> {
+        return specialCharacter.get().then((data)=> data.exists ? Promise.reject() : Promise.resolve())
+          .catch(()=> Promise.resolve());
+      });
+    });
+    it('should write delete to provided batch', function(){
+      let b = new batch();
+      specialCharacter.delete({batch: b}).should.be.fulfilled;
+      b.writes.should.equal(1);
+    });
+  });
+
   describe('#transaction()', function(){
     it('should accept a function which is passed a Transaction, DocumentSnapshot, DocumentReference', function(){
       specialCharacter.transaction((t, doc, ref)=> {
         t.constructor.name.should.equal('Transaction');
-        doc.constructor.name.should.equal('QueryDocumentSnapshot');
+        doc.constructor.name.should.equal('DocumentSnapshot');
         ref.constructor.name.should.equal('DocumentReference');
         return Promise.resolve();
       }).should.be.fulfilled;
