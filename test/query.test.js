@@ -1,5 +1,5 @@
 const {collection, document} = require('../lib/firestore');
-const reference = require('../lib/firestore/reference');
+const query = require('../lib/firestore/query');
 const chai = require('chai');
 chai.use(require('chai-as-promised'));
 chai.should();
@@ -14,7 +14,11 @@ describe('query', function(){
   });
 
   describe('#get()', function(){
-    it('should return a promise which resolves with a QuerySnapshot matching the set query options');
+    it('should return a promise which resolves with a QuerySnapshot matching the set query options', function(){
+      let col = new collection("users/kole/characters");
+      let qry = new query(col.reference, {orderBy: ['timestamp', 'asc']});
+      qry.get().should.be.fulfilled;
+    });
   });
 
   describe('#startAfter()', function(){

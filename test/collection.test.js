@@ -49,11 +49,8 @@ describe('firestore.collection', function(){
 
   describe('#add()', function(){
     it('should create a new document with a random id', function(){
-      characters.instance({userId: 'kole'}).add({skillPoints: 10}).then((ref)=> {
-        ref.should.respondTo('get');
-        ref.should.have.property('id');
-        return Promise.resolve();
-      }).should.be.fulfilled;
+      characters.instance({userId: 'kole'}).add({skillPoints: 10})
+        .should.eventually.respondTo('get').have.property('id');
     });
   });
 
@@ -75,56 +72,47 @@ describe('firestore.collection', function(){
     let myCharacters;
     it('should fetch all documents when no options provided', function(){
        myCharacters = characters.instance({userId: 'kole'});
-      return myCharacters.get().then((snap)=> {
-        snap.should.have.property('size');
-        return Promise.resolve();
-      }).should.be.fulfilled;
+        myCharacters.get().then((snap)=> {
+          return Promise.resolve(typeof snap.size == 'number');
+        }).should.eventually.be.ok;
     });
 
     it('should return QuerySnapshot using orderBy', function(){
-      return myCharacters.get({orderBy: 'timestamp'}).then((snap)=> {
-        snap.should.have.property('size');
-        return Promise.resolve();
-      }).should.be.fulfilled;
+      myCharacters.get({orderBy: 'timestamp'}).then((snap)=> {
+        return Promise.resolve(typeof snap.size == 'number');
+      }).should.eventually.be.ok;
     });
 
     it('should return QuerySnapshot using orderBy w/ direction', function(){
-      return myCharacters.get({orderBy: ['timestamp', 'asc']}).then((snap)=> {
-        snap.should.have.property('size');
-        return Promise.resolve();
-      }).should.be.fulfilled;
+      myCharacters.get({orderBy: ['timestamp', 'asc']}).then((snap)=> {
+        return Promise.resolve(typeof snap.size == 'number');
+      }).should.eventually.be.ok;
     });
 
     it('should return proper QuerySnapshot using orderBy w/ limit', function(){
-      return myCharacters.get({orderBy: ['timestamp', 'asc'], limit: 1}).then((snap)=> {
-        snap.should.have.property('size', 1);
-        return Promise.resolve();
-      }).should.be.fulfilled;
+      myCharacters.get({orderBy: ['timestamp', 'asc'], limit: 1}).then((snap)=> {
+        return Promise.resolve(snap.size == 1);
+      }).should.eventually.be.ok;
     });
 
     it('should return QuerySnapshot for where query', function(){
-      return myCharacters.get({where: ['public', '==', true]}).then((snap)=> {
-        snap.should.have.property('size', 0);
-        return Promise.resolve();
-      }).should.be.fulfilled;
+      myCharacters.get({where: ['public', '==', true]}).then((snap)=> {
+        return Promise.resolve(snap.size == 0);
+      }).should.eventually.be.ok;
     });
 
     it('should return QuerySnapshot for double where query', function(){
-      return myCharacters.get({where: ['public', '==', true, 'visible', '==', true]}).then((snap)=> {
-        snap.should.have.property('size', 0);
-        return Promise.resolve();
-      }).should.be.fulfilled;
+      myCharacters.get({where: ['public', '==', true, 'visible', '==', true]}).then((snap)=> {
+        return Promise.resolve(snap.size == 0);
+      }).should.eventually.be.ok;
     });
 
     it('should return proper QuerySnapshot for startAfter query', function(){
-      return myCharacters.get({orderBy: ['timestamp', 'asc']}).then((snap)=> {
-        let data = []
-        snap.forEach((doc)=> data.push(doc.data().timestamp));
-        return myCharacters.get({orderBy: ['timestamp', 'asc'], startAfter: data[0]}).then((afterSnap)=> {
-          afterSnap.should.have.property('size', 1);
-          return Promise.resolve();
-        })
-      }).should.be.fulfilled;
+      myCharacters.get({orderBy: ['timestamp', 'asc']}).then((snap)=> {
+        return myCharacters.get({orderBy: ['timestamp', 'asc'], startAfter: snap.docs[0]}).then((afterSnap)=> {
+          return Promise.resolve(typeof snap.size == 'number');
+        });
+      }).should.eventually.be.ok;
     });
 
   });
@@ -135,26 +123,26 @@ describe('firestore.collection', function(){
       myCharacters = characters.instance({userId: 'kole'});
     })
     it('should fire the provided callback with a document snapshot', function(){
-      myCharacters.iterate((doc)=> doc.should.respondTo('data'));
+      let fired = 0;
+      return myCharacters.iterate((doc)=> { throw "did fire" }).should.be.rejected;
     });
 
     it('should return a promise that resolves once all batches have been iterated', function(){
       let its = 0;
-      myCharacters.iterate((doc)=> its++, {limit: 1}).then(()=> {
-        its.should.equal(2);
-        return Promise.resolve();
-      }).should.be.fulfilled;
+      myCharacters.iterate((doc)=> its++, {limit: 20}).then(()=> {
+        return Promise.resolve(its);
+      }).should.eventually.satisfy((num)=> num > 50);
     });
 
     it('should reject with last document of iteration', function(){
       myCharacters.iterate((doc)=> Promise.reject()).catch((doc)=>{
-        doc.should.respondTo('data');
-      });
+        return Promise.resolve(doc);
+      }).should.eventually.respondTo('data');
     });
 
     it('should accept all query options like get()', function(){
-      myCharacters.iterate((doc)=> doc.should.respondTo('data'), {orderBy: ['timestamp', 'asc'], where: ['public', '==', true]})
-      .should.be.fulfilled;
+      return myCharacters.iterate((doc)=> { throw "did fire" }, {orderBy: ['timestamp', 'asc'], where: ['public', '==', true]})
+        .should.be.fulfilled;
     });
   });
 
