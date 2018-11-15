@@ -118,26 +118,9 @@ describe('firestore.collection', function(){
 
   });
 
-  describe('#delete()', function(){
-    it('should reject when the yes option is not explicitly set', function(){
-      myCharacters.delete().should.be.rejected;
-    });
-
-    it('should shallow delete all documents in collection when recursive set to false', function(){
-      return myCharacters.delete({yes: true, recursive: false}).then(()=> {
-        return myCharacters.get().then((snap)=> {
-          return snap.size == 0 ? Promise.resolve() : Promise.reject();
-        });
-      });
-    });
-
-    it("should deep delete recursively by default");
-  });
-
   describe('#iterate()', function(){
     it('should fire the provided callback with a document snapshot', function(){
-      let fired = 0;
-      return myCharacters.iterate((doc)=> { throw "did fire" }).should.be.rejected;
+      myCharacters.iterate((doc)=> Promise.reject()).should.be.rejected;
     });
 
     it('should return a promise that resolves once all batches have been iterated', function(){
@@ -157,6 +140,22 @@ describe('firestore.collection', function(){
       return myCharacters.iterate((doc)=> { throw "did fire" }, {orderBy: ['timestamp', 'asc'], where: ['public', '==', true]})
         .should.be.fulfilled;
     });
+  });
+
+  describe('#delete()', function(){
+    it('should reject when the yes option is not explicitly set', function(){
+      myCharacters.delete().should.be.rejected;
+    });
+
+    it('should shallow delete all documents in collection when recursive set to false', function(){
+      return myCharacters.delete({yes: true, recursive: false}).then(()=> {
+        return myCharacters.get().then((snap)=> {
+          return snap.size == 0 ? Promise.resolve() : Promise.reject();
+        });
+      });
+    });
+
+    it("should deep delete recursively by default");
   });
 
   describe("#reference", function(){

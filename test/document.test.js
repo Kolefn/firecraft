@@ -121,24 +121,11 @@ describe('firestore.document', function(){
   });
 
   var specialCharacter;
-  describe('#get()', function(){
+  describe('#set()', function(){
     before(function(){
       specialCharacter = characterDoc.instance({userId: 'kole', characterId: 'zabeebo'});
       return true;
     });
-
-    it('should return a promise which resolves', function(){
-      return specialCharacter.get().should.be.fulfilled;
-    });
-
-    it('should return an object with standard properties', function(){
-      return specialCharacter.get().should.eventually.respondTo('data');
-    });
-
-  });
-
-  describe('#set()', function(){
-    //let specialCharacter = new document('users/kole/characters/zabeebo');
     it('should return a promise which resolves', function(){
       return specialCharacter.set({timestamp: new Date()}).should.be.fulfilled;
     });
@@ -155,6 +142,20 @@ describe('firestore.document', function(){
       b.writes.should.equal(1);
     });
   });
+  
+  describe('#get()', function(){
+
+    it('should return a promise which resolves', function(){
+      return specialCharacter.get().should.be.fulfilled;
+    });
+
+    it('should return an object with standard properties', function(){
+      return specialCharacter.get().should.eventually.respondTo('data');
+    });
+
+  });
+
+
 
 
   describe('#update()', function(){
