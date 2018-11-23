@@ -2,8 +2,6 @@ const path = require('../lib/firestore/path');
 const reference = require('../lib/firestore/reference');
 const chai = require('chai');
 chai.should();
-
-
 describe('reference', function(){
   describe('#parse()', function(){
     it('should get a DocumentReference from a document path', function(){
@@ -17,7 +15,6 @@ describe('reference', function(){
       chai.expect(()=> reference.parse(new path('users/{userId}'))).to.throw();
     });
   });
-
   describe('#getPath()', function(){
     it('should return a path object from a DocumentReference', function(){
       let path1 = new path('users/kole');

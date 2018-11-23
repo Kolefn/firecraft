@@ -1,7 +1,6 @@
 const util = require('../lib/firestore/util');
 const chai = require('chai');
 chai.should();
-
 describe('util', function(){
   describe('#extractData', function(){
     it('should return internal data of Change object.', function(){
@@ -22,6 +21,12 @@ describe('util', function(){
       let dummy = {result0: util.extractData(null), result1: util.extractData(undefined)};
       dummy.should.have.property("result0", null);
       dummy.should.have.property("result1", null);
+    });
+    it('should extract snapshot or change objects and assign context params', function(){
+      let obj = {snapshot: {data: ()=> { return {timestamp: new Date()} } }, context: {params: {userId: 'kolefn'}}};
+      let data = util.extractData(obj);
+      data.should.have.property('userId', 'kolefn');
+      data.should.have.property('timestamp');
     });
   });
 });
