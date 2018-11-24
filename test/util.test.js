@@ -28,6 +28,17 @@ describe('util', function(){
       data.should.have.property('userId', 'kolefn');
       data.should.have.property('timestamp');
     });
+    it('should detect snapshot struct from eventData', function(){
+      let obj = {eventData: {data: ()=> { return {timestamp: new Date()} } }, context: {params: {userId: 'kolefn'}}};
+      let data = util.extractData(obj);
+      data.should.have.property('userId', 'kolefn');
+      data.should.have.property('timestamp');
+    });
+    it('should detect change struct form eventData', function(){
+      let obj = {eventData: {before: {data: ()=> {return {number: 3}}}, after: {data:()=> {return {number: 4}}}}};
+      let data = util.extractData(obj);
+      data.should.have.property("number", 4)
+    });
   });
   describe('#computeTransactionUpdateObject()', function(){
     it('should support simple integer values', function(){
@@ -62,6 +73,13 @@ describe('util', function(){
       update.should.have.property("score", 3);
       update.should.have.property("damage", 500);
       update.should.have.property("accuracy", 0.7);
+    });
+    it('should support subtract option', function(){
+      let before = {score: 7, damage: 200};
+      let after = {score: 5, damage: 500};
+      let delta = util.computeTransactionUpdateObject(after, before, {subtract: true});
+      delta.should.have.property("score", -2);
+      delta.should.have.property("damage", 300);
     });
   });
 });
