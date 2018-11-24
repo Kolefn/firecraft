@@ -95,7 +95,8 @@ describe('firestore.document', function(){
     it("should append handler to ongoing onWrite handlers", function(){
       let sayHello = ()=> "hello world";
       characterDoc.onWrite(sayHello);
-      characterDoc._onWriteHandlers.pop().should.equal(sayHello);
+      let changeSpoof = {before: {}, after: {exists: true, data: ()=> 1}};
+      characterDoc._onWriteHandlers.pop()(changeSpoof, {}).should.equal("hello world");
     });
   });
   var specialCharacter;
@@ -181,6 +182,26 @@ describe('firestore.document', function(){
       return specialCharacter.incrementField('score', 2).then(()=> {
         return specialCharacter.get().then((doc)=> {
           chai.expect(doc.data().score == 4).to.be.true;
+          return Promise.resolve();
+        });
+      });
+    });
+  });
+  describe('#incrementFields()', function(){
+    it('should intialize the fields with the passed values they do not exist.', function(){
+      return specialCharacter.incrementFields({damage: 5, accuracy: 0.7}).then(()=> {
+        return specialCharacter.get().then((doc)=> {
+          chai.expect(doc.data().damage == 5).to.be.true;
+          chai.expect(doc.data().accuracy == 0.7).to.be.true;
+          return Promise.resolve();
+        });
+      });
+    });
+    it('should add to the fields with the passed values if they do exist.', function(){
+      return specialCharacter.incrementFields({damage: 10, accuracy: -0.2}).then(()=> {
+        return specialCharacter.get().then((doc)=> {
+          chai.expect(doc.data().damage == 15).to.be.true;
+          chai.expect(doc.data().accuracy === (0.7 - 0.2)).to.be.true;
           return Promise.resolve();
         });
       });
