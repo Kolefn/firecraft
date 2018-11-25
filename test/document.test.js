@@ -118,6 +118,9 @@ describe('firestore.document', function(){
       specialCharacter.set({batchSet: new Date()}, {batch: b}).should.be.fulfilled;
       b.writes.should.equal(1);
     });
+    it('should support the createOnly option flag', function(){
+      specialCharacter.set({timestamp: new Date()}, {createOnly: true}).should.be.rejected;
+    });
   });
   describe('#get()', function(){
     it('should return a promise which resolves', function(){
