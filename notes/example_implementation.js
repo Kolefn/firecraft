@@ -30,6 +30,44 @@ const PATHS = {
   archive: 'archives/{archiveId}'
 };
 
+const DATA = {
+  user: {
+    defaultPackId: {type: 'packId', optional: false },
+    admin: {type: 'bool'},
+  },
+  userPack: {
+    reference: {to: 'pack', optional: false}, // or fieldName: {type: 'reference', to: 'pack'}
+  },
+  userHide: {
+    reference: {to: 'user', where: {userId: 'hiddenUserId'}, optional: false}
+  },
+  userContent: {
+    reference: {to: ''}
+  }
+
+}
+let schema = firecraft.firestore.schema();
+schema.typedef('userId', 'uid');
+schema.typedef('packId', 'id');
+schema.typedef('contentId', 'id');
+schema.typedef('notificationId', 'id');
+schema.typedef('badgeId', 'string');
+schema.typedef('itemId', 'string');
+schema.typedef('groupId', 'string', 10);
+schema.typedef('postId', 'contentId');
+schema.typedef('commentId', 'contentId');
+schema.typedef('hiddenUserId', 'userId');
+schema.typedef('recipientId', 'userId');
+schema.defaultField('timestamp');
+schema.documents(PATHS, DATA);
+/*
+ OR
+ schema.document('user', PATHS.user, DATA.user);
+ schema.document('userPack', PATHS.userPack, DATA.userPack);
+ schema.document('userHide', PATHS.userHide, DATA.userHide);
+ ...
+*/
+
 let docs = functions.firestore.createDocuments(PATHS);
 /* or alternatively
     let doc = new function.firestore.collection.document(path);
